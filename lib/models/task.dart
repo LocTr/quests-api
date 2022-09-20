@@ -45,8 +45,28 @@ class Task extends Equatable {
         ),
         id = id ?? const Uuid().v4();
 
+  Task copyWith({
+    String? id,
+    String? title,
+    DateTime? createdDate,
+    DateTime? completedDate,
+    int? totalTaskPoint,
+    int? finishedTaskPoint,
+    List<Group>? groups,
+    List<Subtask>? subtasks,
+  }) {
+    return Task(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        createdDate: createdDate ?? this.createdDate,
+        completedDate: completedDate ?? this.completedDate,
+        totalTaskPoint: totalTaskPoint ?? this.totalTaskPoint,
+        finishedTaskPoint: finishedTaskPoint ?? this.finishedTaskPoint);
+  }
+
   @override
   List<Object?> get props => [
+        id,
         title,
         createdDate,
         completedDate,
@@ -83,7 +103,7 @@ class Subtask extends Equatable {
   }
 
   @override
-  List<Object?> get props => [title, isDone];
+  List<Object?> get props => [id, title, isDone];
 }
 
 @HiveType(typeId: 3)
@@ -102,5 +122,5 @@ class Group extends Equatable {
         id = id ?? const Uuid().v4();
 
   @override
-  List<Object?> get props => [title];
+  List<Object?> get props => [id, title];
 }
