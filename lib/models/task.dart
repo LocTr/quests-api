@@ -98,8 +98,11 @@ class Subtask extends Equatable {
         ),
         id = id ?? const Uuid().v4();
 
-  Subtask copyWith({String? title, bool? isDone}) {
-    return Subtask(title: title ?? this.title, isDone: isDone ?? this.isDone);
+  Subtask copyWith({int? id, String? title, bool? isDone}) {
+    return Subtask(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        isDone: isDone ?? this.isDone);
   }
 
   @override
