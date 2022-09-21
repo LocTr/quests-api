@@ -7,13 +7,12 @@ import 'package:task_api/models/task.dart';
 class TaskApi {
   TaskApi._create() {
     Hive
-      ..init('test-box')
       ..registerAdapter(TaskAdapter())
       ..registerAdapter(SubtaskAdapter())
       ..registerAdapter(GroupAdapter());
   }
 
-  static Future<TaskApi> create() async {
+  static Future<TaskApi> create(void init) async {
     TaskApi api = TaskApi._create();
     await api._asyncInit();
     return api;
@@ -21,6 +20,7 @@ class TaskApi {
 
   _asyncInit() async {
     _box = await Hive.openBox('test-box');
+    _taskStreamController.add(_box.values.toList());
     _box.watch().listen((_) {
       _taskStreamController.add(_box.values.toList());
     });

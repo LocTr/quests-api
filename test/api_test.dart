@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:task_api/task_api.dart';
 
 void main() {
   test('test db', () async {
-    TaskApi api = await TaskApi.create();
+    TaskApi api = await TaskApi.create(Hive.init('asdfasdf'));
   });
 }
