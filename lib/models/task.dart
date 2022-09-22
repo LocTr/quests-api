@@ -12,10 +12,10 @@ class Task extends Equatable {
   final String title;
 
   @HiveField(2)
-  final DateTime createdDate;
+  final DateTime createdAt;
 
   @HiveField(3)
-  final DateTime completedDate;
+  final DateTime updateAt;
 
   @HiveField(4)
   final int totalTaskPoint;
@@ -29,16 +29,17 @@ class Task extends Equatable {
   @HiveField(7)
   final List<Subtask> subtasks;
 
-  const Task({
+  Task({
     this.id = '',
     required this.title,
-    required this.createdDate,
-    required this.completedDate,
+    DateTime? createdAt,
+    DateTime? updateAt,
     required this.totalTaskPoint,
     required this.finishedTaskPoint,
     this.groups = const [],
     this.subtasks = const [],
-  });
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updateAt = updateAt ?? DateTime.now();
 
   Task copyWith({
     String? id,
@@ -53,8 +54,8 @@ class Task extends Equatable {
     return Task(
         id: id ?? this.id,
         title: title ?? this.title,
-        createdDate: createdDate ?? this.createdDate,
-        completedDate: completedDate ?? this.completedDate,
+        createdAt: createdDate ?? DateTime.now(),
+        updateAt: completedDate ?? DateTime.now(),
         totalTaskPoint: totalTaskPoint ?? this.totalTaskPoint,
         finishedTaskPoint: finishedTaskPoint ?? this.finishedTaskPoint);
   }
@@ -63,8 +64,8 @@ class Task extends Equatable {
   List<Object?> get props => [
         id,
         title,
-        createdDate,
-        completedDate,
+        createdAt,
+        updateAt,
         totalTaskPoint,
         finishedTaskPoint,
         groups,

@@ -18,8 +18,8 @@ class TaskAdapter extends TypeAdapter<Task> {
     };
     return Task(
       title: fields[0] as String,
-      createdDate: fields[1] as DateTime,
-      completedDate: fields[2] as DateTime,
+      createdAt: fields[1] as DateTime,
+      updateAt: fields[2] as DateTime,
       totalTaskPoint: fields[3] as int,
       finishedTaskPoint: fields[4] as int,
       groups: (fields[5] as List).cast<Group>(),
@@ -34,9 +34,9 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.createdDate)
+      ..write(obj.createdAt)
       ..writeByte(2)
-      ..write(obj.completedDate)
+      ..write(obj.updateAt)
       ..writeByte(3)
       ..write(obj.totalTaskPoint)
       ..writeByte(4)
