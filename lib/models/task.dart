@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 part 'task.g.dart';
 
@@ -30,8 +29,8 @@ class Task extends Equatable {
   @HiveField(7)
   final List<Subtask> subtasks;
 
-  Task({
-    String? id,
+  const Task({
+    this.id = '',
     required this.title,
     required this.createdDate,
     required this.completedDate,
@@ -39,11 +38,7 @@ class Task extends Equatable {
     required this.finishedTaskPoint,
     this.groups = const [],
     this.subtasks = const [],
-  })  : assert(
-          id == null || id.isNotEmpty,
-          'id can not be null and should be empty',
-        ),
-        id = id ?? const Uuid().v4();
+  });
 
   Task copyWith({
     String? id,
@@ -91,14 +86,9 @@ class Subtask extends Equatable {
   @HiveField(2)
   final bool isDone;
 
-  Subtask({String? id, required this.title, required this.isDone})
-      : assert(
-          id == null || id.isNotEmpty,
-          'id can not be null and should be empty',
-        ),
-        id = id ?? const Uuid().v4();
+  const Subtask({this.id = '', required this.title, required this.isDone});
 
-  Subtask copyWith({int? id, String? title, bool? isDone}) {
+  Subtask copyWith({String? id, String? title, bool? isDone}) {
     return Subtask(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -117,12 +107,7 @@ class Group extends Equatable {
   @HiveField(1)
   final String title;
 
-  Group({String? id, required this.title})
-      : assert(
-          id == null || id.isNotEmpty,
-          'id can not be null and should be empty',
-        ),
-        id = id ?? const Uuid().v4();
+  Group({this.id = '', required this.title});
 
   @override
   List<Object?> get props => [id, title];
