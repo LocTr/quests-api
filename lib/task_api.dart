@@ -46,6 +46,11 @@ class TaskApi {
     return;
   }
 
+  Future<void> deleteAll() async {
+    await _box.clear();
+    return;
+  }
+
   Future<List<Task>> getTasks() async {
     return _box.values.toList();
   }

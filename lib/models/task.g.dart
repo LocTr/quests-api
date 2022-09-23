@@ -17,33 +17,36 @@ class TaskAdapter extends TypeAdapter<Task> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Task(
-      title: fields[0] as String,
-      createdAt: fields[1] as DateTime,
-      updateAt: fields[2] as DateTime,
-      totalTaskPoint: fields[3] as int,
-      finishedTaskPoint: fields[4] as int,
-      groups: (fields[5] as List).cast<Group>(),
-      subtasks: (fields[6] as List).cast<Subtask>(),
+      id: fields[0] as String,
+      title: fields[1] as String,
+      createdAt: fields[2] as DateTime?,
+      updateAt: fields[3] as DateTime?,
+      totalTaskPoint: fields[4] as int,
+      finishedTaskPoint: fields[5] as int,
+      groups: (fields[6] as List).cast<Group>(),
+      subtasks: (fields[7] as List).cast<Subtask>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
-      ..write(obj.title)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.createdAt)
+      ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.updateAt)
+      ..write(obj.createdAt)
       ..writeByte(3)
-      ..write(obj.totalTaskPoint)
+      ..write(obj.updateAt)
       ..writeByte(4)
-      ..write(obj.finishedTaskPoint)
+      ..write(obj.totalTaskPoint)
       ..writeByte(5)
-      ..write(obj.groups)
+      ..write(obj.finishedTaskPoint)
       ..writeByte(6)
+      ..write(obj.groups)
+      ..writeByte(7)
       ..write(obj.subtasks);
   }
 
@@ -69,18 +72,21 @@ class SubtaskAdapter extends TypeAdapter<Subtask> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Subtask(
-      title: fields[0] as String,
-      isDone: fields[1] as bool,
+      id: fields[0] as String,
+      title: fields[1] as String,
+      isDone: fields[2] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Subtask obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.title)
+      ..write(obj.id)
       ..writeByte(1)
+      ..write(obj.title)
+      ..writeByte(2)
       ..write(obj.isDone);
   }
 
@@ -106,15 +112,18 @@ class GroupAdapter extends TypeAdapter<Group> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Group(
-      title: fields[0] as String,
+      id: fields[0] as String,
+      title: fields[1] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Group obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
       ..write(obj.title);
   }
 
