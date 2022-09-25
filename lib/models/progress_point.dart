@@ -11,10 +11,9 @@ class ProgressPoint extends Equatable {
   @HiveField(1)
   final DateTime date;
 
-  const ProgressPoint({
+  ProgressPoint({
     required this.point,
-    required this.date,
-  });
+  }) : date = DateTime.now();
 
   @override
   List<Object?> get props => [point, date];

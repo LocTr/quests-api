@@ -18,7 +18,6 @@ class ProgressPointAdapter extends TypeAdapter<ProgressPoint> {
     };
     return ProgressPoint(
       point: fields[0] as int,
-      date: fields[1] as DateTime,
     );
   }
 

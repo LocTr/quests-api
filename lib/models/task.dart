@@ -108,7 +108,7 @@ class Group extends Equatable {
   @HiveField(1)
   final String title;
 
-  Group({this.id = '', required this.title});
+  const Group({this.id = '', required this.title});
 
   @override
   List<Object?> get props => [id, title];

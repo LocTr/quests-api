@@ -19,7 +19,7 @@ class TaskApi {
   }
 
   _asyncInit() async {
-    _box = await Hive.openBox('test-box');
+    _box = await Hive.openBox('tasks-box');
     _taskStreamController.add(_box.values.toList());
     _box.watch().listen((_) {
       _taskStreamController.add(_box.values.toList());
