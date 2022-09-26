@@ -52,12 +52,15 @@ class Task extends Equatable {
     List<Subtask>? subtasks,
   }) {
     return Task(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        createdAt: createdDate ?? DateTime.now(),
-        updateAt: completedDate ?? DateTime.now(),
-        totalTaskPoint: totalTaskPoint ?? this.totalTaskPoint,
-        finishedTaskPoint: finishedTaskPoint ?? this.finishedTaskPoint);
+      id: id ?? this.id,
+      title: title ?? this.title,
+      createdAt: createdDate ?? DateTime.now(),
+      updateAt: completedDate ?? DateTime.now(),
+      totalTaskPoint: totalTaskPoint ?? this.totalTaskPoint,
+      finishedTaskPoint: finishedTaskPoint ?? this.finishedTaskPoint,
+      groups: groups ?? this.groups,
+      subtasks: subtasks ?? this.subtasks,
+    );
   }
 
   @override
