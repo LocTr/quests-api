@@ -1,8 +1,6 @@
-library task_api;
-
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:task_api/models/task.dart';
+import 'package:tasks_api/models/task.dart';
 
 class TaskApi {
   TaskApi._create() {

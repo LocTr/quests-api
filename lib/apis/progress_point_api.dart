@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:task_api/models/progress_point.dart';
+import 'package:tasks_api/models/progress_point.dart';
 
 class ProgressPointApi {
   ProgressPointApi._create() {
