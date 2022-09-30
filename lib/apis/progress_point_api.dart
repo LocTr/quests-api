@@ -29,10 +29,17 @@ class ProgressPointApi {
   Stream<List<ProgressPoint>> getTasksStream() =>
       _taskStreamController.asBroadcastStream();
 
-  Future<void> saveProgress(ProgressPoint point) async {
-    _box.getAt(_box.length + 1);
+  Future<void> saveProgress(ProgressPoint progressPoint) async {
+    ProgressPoint? todayPoint =
+        _box.get(ProgressPoint.getHiveKey(progressPoint.date));
 
-    await _box.add(point);
+    if (todayPoint == null) {
+      await _box.put(
+          ProgressPoint.getHiveKey(progressPoint.date), progressPoint);
+    } else {
+      await _box.put(ProgressPoint.getHiveKey(progressPoint.date),
+          ProgressPoint(point: todayPoint.point + progressPoint.point));
+    }
     return;
   }
 

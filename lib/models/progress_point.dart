@@ -15,6 +15,10 @@ class ProgressPoint extends Equatable {
     required this.point,
   }) : date = DateTime.now();
 
+  static String getHiveKey(DateTime date) {
+    return '${date.year}-${date.month}-${date.day}';
+  }
+
   @override
   List<Object?> get props => [point, date];
 }

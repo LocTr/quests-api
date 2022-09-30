@@ -2,16 +2,16 @@ import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tasks_api/models/task.dart';
 
-class TaskApi {
-  TaskApi._create() {
+class TasksApi {
+  TasksApi._create() {
     Hive
       ..registerAdapter(TaskAdapter())
       ..registerAdapter(SubtaskAdapter())
       ..registerAdapter(GroupAdapter());
   }
 
-  static Future<TaskApi> create(void init) async {
-    TaskApi api = TaskApi._create();
+  static Future<TasksApi> create(void init) async {
+    TasksApi api = TasksApi._create();
     await api._asyncInit();
     return api;
   }
