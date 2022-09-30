@@ -10,7 +10,7 @@ class TasksApi {
       ..registerAdapter(GroupAdapter());
   }
 
-  static Future<TasksApi> create(void init) async {
+  static Future<TasksApi> create() async {
     TasksApi api = TasksApi._create();
     await api._asyncInit();
     return api;

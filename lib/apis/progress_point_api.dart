@@ -7,7 +7,7 @@ class ProgressPointApi {
     Hive.registerAdapter(ProgressPointAdapter());
   }
 
-  static Future<ProgressPointApi> create(void init) async {
+  static Future<ProgressPointApi> create() async {
     ProgressPointApi api = ProgressPointApi._create();
     await api._asyncInit();
     return api;
