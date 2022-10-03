@@ -29,6 +29,9 @@ class Task extends Equatable {
   @HiveField(7)
   final List<Subtask> subtasks;
 
+  @HiveField(8)
+  final List<int> repeat;
+
   Task({
     this.id = '',
     required this.title,
@@ -38,6 +41,7 @@ class Task extends Equatable {
     required this.finishedTaskPoint,
     this.groups = const [],
     this.subtasks = const [],
+    this.repeat = const [],
   })  : createdAt = createdAt ?? DateTime.now(),
         updateAt = updateAt ?? DateTime.now();
 
@@ -50,6 +54,7 @@ class Task extends Equatable {
     int? finishedTaskPoint,
     List<Group>? groups,
     List<Subtask>? subtasks,
+    List<int>? repeat,
   }) {
     return Task(
       id: id ?? this.id,
@@ -73,6 +78,7 @@ class Task extends Equatable {
         finishedTaskPoint,
         groups,
         subtasks,
+        repeat,
       ];
 
   @override
