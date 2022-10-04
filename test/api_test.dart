@@ -4,6 +4,6 @@ import 'package:tasks_api/tasks_api.dart';
 
 void main() {
   test('test db', () async {
-    TasksApi api = await TasksApi.create(Hive.init('asdfasdf'));
+    QuestsApi api = await QuestsApi.create(Hive.init('asdfasdf'));
   });
 }
