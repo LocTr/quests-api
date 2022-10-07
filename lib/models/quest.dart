@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
+import 'enums.dart';
+
 part 'quest.g.dart';
 
 @HiveType(typeId: 1)
@@ -23,6 +25,12 @@ class Quest extends Equatable {
   @HiveField(5)
   final Repeat repeat;
 
+  @HiveField(6)
+  final Difficulty difficulty;
+
+  @HiveField(7)
+  final Stat stat;
+
   Quest({
     this.id = '',
     required this.title,
@@ -30,6 +38,8 @@ class Quest extends Equatable {
     DateTime? createdAt,
     DateTime? updateAt,
     required this.repeat,
+    this.difficulty = Difficulty.normal,
+    this.stat = Stat.none,
   })  : createdAt = createdAt ?? DateTime.now(),
         updateAt = updateAt ?? DateTime.now();
 
@@ -39,18 +49,19 @@ class Quest extends Equatable {
     String? detail,
     DateTime? createdAt,
     DateTime? updateAt,
-    int? totalTaskPoint,
-    int? finishedTaskPoint,
     Repeat? repeat,
+    Difficulty? difficulty,
+    Stat? stat,
   }) {
     return Quest(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      detail: detail ?? this.detail,
-      createdAt: createdAt ?? this.createdAt,
-      updateAt: updateAt ?? DateTime.now(),
-      repeat: repeat ?? this.repeat,
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        detail: detail ?? this.detail,
+        createdAt: createdAt ?? this.createdAt,
+        updateAt: updateAt ?? DateTime.now(),
+        repeat: repeat ?? this.repeat,
+        difficulty: difficulty ?? this.difficulty,
+        stat: stat ?? this.stat);
   }
 
   @override
@@ -61,20 +72,10 @@ class Quest extends Equatable {
         createdAt,
         updateAt,
         repeat,
+        difficulty,
+        stat,
       ];
 
   @override
   bool? get stringify => true;
-}
-
-@HiveType(typeId: 2)
-enum Repeat {
-  @HiveField(0)
-  daily,
-
-  @HiveField(1)
-  weekly,
-
-  @HiveField(2)
-  monthly,
 }

@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+import 'package:quests_api/models/enums.dart';
+import 'package:quests_api/models/goal.dart';
 import 'package:quests_api/models/quest.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -6,7 +8,9 @@ class QuestsApi {
   QuestsApi._create() {
     Hive
       ..registerAdapter(QuestAdapter())
-      ..registerAdapter(RepeatAdapter());
+      ..registerAdapter(GoalAdapter())
+      ..registerAdapter(DifficultyAdapter())
+      ..registerAdapter(StatAdapter());
   }
 
   static Future<QuestsApi> create() async {
