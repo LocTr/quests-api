@@ -16,23 +16,24 @@ class QuestsApi {
   static Future<QuestsApi> create() async {
     QuestsApi api = QuestsApi._create();
     await api._asyncInit();
+
     return api;
   }
 
   _asyncInit() async {
-    _box = await Hive.openBox('tasks-box');
-    _taskStreamController.add(_box.values.toList());
+    _box = await Hive.openBox('quests-box');
+    _questStreamController.add(_box.values.toList());
     _box.watch().listen((_) {
-      _taskStreamController.add(_box.values.toList());
+      _questStreamController.add(_box.values.toList());
     });
   }
 
   late Box<Quest> _box;
 
-  final _taskStreamController = BehaviorSubject<List<Quest>>.seeded(const []);
+  final _questStreamController = BehaviorSubject<List<Quest>>.seeded(const []);
 
-  Stream<List<Quest>> getTasksStream() =>
-      _taskStreamController.asBroadcastStream();
+  Stream<List<Quest>> getQuestsStream() =>
+      _questStreamController.asBroadcastStream();
 
   Future<void> saveQuest(Quest task) async {
     await _box.put(task.id, task);
@@ -44,7 +45,7 @@ class QuestsApi {
     return;
   }
 
-  Future<List<Quest>> getTasks() async {
+  Future<List<Quest>> getQuests() async {
     return _box.values.toList();
   }
 }
