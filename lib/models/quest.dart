@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 import 'enums.dart';
 
@@ -32,7 +33,7 @@ class Quest extends Equatable {
   final Stat stat;
 
   Quest({
-    this.id = '',
+    String? id,
     required this.title,
     this.detail = '',
     DateTime? createdAt,
@@ -40,7 +41,8 @@ class Quest extends Equatable {
     required this.repeat,
     this.difficulty = Difficulty.normal,
     this.stat = Stat.none,
-  })  : createdAt = createdAt ?? DateTime.now(),
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now(),
         updateAt = updateAt ?? DateTime.now();
 
   Quest copyWith({
