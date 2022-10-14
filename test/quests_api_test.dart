@@ -24,7 +24,7 @@ void main() {
     setUp(() {
       print('set up');
       return Future(() async {
-        await api.box.clear().then((value) => print('setting upupup'));
+        await api._box.clear().then((value) => print('setting upupup'));
         print('done setting up');
         return;
       });
@@ -35,9 +35,9 @@ void main() {
       await api.saveQuest(testObjects[1]);
       await api.saveQuest(testObjects[2]);
 
-      expect(api.box.get(testObjects[0].id), equals(testObjects[0]));
-      expect(api.box.get(testObjects[1].id), equals(testObjects[1]));
-      expect(api.box.get(testObjects[2].id), equals(testObjects[2]));
+      expect(api._box.get(testObjects[0].id), equals(testObjects[0]));
+      expect(api._box.get(testObjects[1].id), equals(testObjects[1]));
+      expect(api._box.get(testObjects[2].id), equals(testObjects[2]));
       print('run test 1');
     });
     test('Subscript quests stream', () {
@@ -57,7 +57,7 @@ void main() {
 
     tearDown(() {
       return Future(() async {
-        await api.box.clear();
+        await api._box.clear();
         print('done tearing all down');
         return;
       });
