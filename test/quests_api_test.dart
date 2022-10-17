@@ -1,70 +1,87 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:quests_api/apis/quests_api.dart';
 import 'package:quests_api/models/enums.dart';
 import 'package:quests_api/models/quest.dart';
 
+class MockHive extends Mock implements HiveInterface {}
+
+class MockBox<Quest> extends Mock implements Box<Quest> {}
+
+class MockAdapter extends Mock implements QuestAdapter {}
+
 void main() {
   //setup
-  Hive.init('/test-box');
+  group('QuestsApi', () {
+    late HiveInterface hive;
+    late Box<Quest> box;
+    StreamController<BoxEvent> controller = StreamController();
 
-  final testObjects = [
-    Quest(title: 'quest 0', repeat: Repeat.daily, detail: 'quest 0 detail'),
-    Quest(title: 'quest 1', repeat: Repeat.weekly, difficulty: Difficulty.hard),
-    Quest(title: 'quest 2', repeat: Repeat.monthly, stat: Stat.mental),
-  ];
-
-  group('test CRUD quests', () {
-    late QuestsApi api;
-    setUpAll(() async {
-      api = await QuestsApi.create();
-      print('set up all');
-    });
+    final quests = [
+      Quest(title: 'quest 0', repeat: Repeat.daily, detail: 'quest 0 detail'),
+      Quest(
+          title: 'quest 1', repeat: Repeat.weekly, difficulty: Difficulty.hard),
+      Quest(title: 'quest 2', repeat: Repeat.monthly, stat: Stat.mental),
+    ];
 
     setUp(() {
-      print('set up');
-      return Future(() async {
-        await api._box.clear().then((value) => print('setting upupup'));
-        print('done setting up');
-        return;
+      hive = MockHive();
+      box = MockBox<Quest>();
+      when(() => box.values).thenReturn(quests);
+      when(() => box.watch()).thenAnswer((invocation) => controller.stream);
+    });
+
+    setUpAll(() {
+      registerFallbackValue(QuestAdapter);
+      registerFallbackValue(Quest);
+    });
+
+    QuestsApi createSubject() {
+      return QuestsApi(box: box, hiveInterface: hive);
+    }
+
+    group('constructor', () {
+      test('works properly', () {
+        expect(createSubject, returnsNormally);
       });
     });
 
-    test('Add new quests matching hive key', () async {
-      await api.saveQuest(testObjects[0]);
-      await api.saveQuest(testObjects[1]);
-      await api.saveQuest(testObjects[2]);
+    group('initialize quests stream', () {
+      test('with existing quests if present', () {
+        final subject = createSubject();
 
-      expect(api._box.get(testObjects[0].id), equals(testObjects[0]));
-      expect(api._box.get(testObjects[1].id), equals(testObjects[1]));
-      expect(api._box.get(testObjects[2].id), equals(testObjects[2]));
-      print('run test 1');
-    });
-    test('Subscript quests stream', () {
-      var valueStream = api.getQuestsStream();
-      expectLater(
-          valueStream,
-          emitsInOrder(
-            [
-              [],
-              unorderedEquals([testObjects[0]]),
-              unorderedEquals([testObjects[0], testObjects[1]]),
-            ],
-          ));
-      api.saveQuest(testObjects[0]);
-      api.saveQuest(testObjects[1]);
-    });
+        expect(subject.getQuestsStream(), emits(quests));
+        verify(() => box.values).called(1);
+      });
 
-    tearDown(() {
-      return Future(() async {
-        await api._box.clear();
-        print('done tearing all down');
-        return;
+      test('with empty if data is empty', () {
+        when(() => box.values).thenReturn(const Iterable.empty());
+        final subject = createSubject();
+
+        expect(subject.getQuestsStream(), emits(const <Quest>[]));
+        verify(() => box.values).called(1);
       });
     });
 
-    tearDownAll(() {
-      print('tear down all');
+    group('saveQuests', () {
+      test('save quest', () {
+        final quest = Quest(title: 'test quest', repeat: Repeat.daily);
+
+        when(() => box.put(quest.id, quest)).thenAnswer((_) => Future(() {}));
+
+        final subject = createSubject();
+
+        expect(subject.saveQuest(quest), completes);
+        verify(() => box.put(quest.id, quest)).called(1);
+      });
+    });
+
+    test('getQuests returns stream of current quests', () {
+      expect(createSubject().getQuestsStream(), emits(quests));
     });
   });
 }
