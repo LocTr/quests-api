@@ -19,7 +19,6 @@ void main() {
   group('QuestsApi', () {
     late HiveInterface hive;
     late Box<Quest> box;
-    StreamController<BoxEvent> controller = StreamController();
 
     final quests = [
       Quest(title: 'quest 0', repeat: Repeat.daily, detail: 'quest 0 detail'),
@@ -32,12 +31,8 @@ void main() {
       hive = MockHive();
       box = MockBox<Quest>();
       when(() => box.values).thenReturn(quests);
-      when(() => box.watch()).thenAnswer((invocation) => controller.stream);
-    });
-
-    setUpAll(() {
-      registerFallbackValue(QuestAdapter);
-      registerFallbackValue(Quest);
+      when(() => box.watch())
+          .thenAnswer((_) => Stream<BoxEvent>.fromIterable([]));
     });
 
     QuestsApi createSubject() {
@@ -67,20 +62,29 @@ void main() {
       });
     });
 
-    group('saveQuests', () {
-      test('save quest', () {
-        final quest = Quest(title: 'test quest', repeat: Repeat.daily);
+    test('save quest', () {
+      final quest = Quest(title: 'test quest', repeat: Repeat.daily);
 
-        when(() => box.put(quest.id, quest)).thenAnswer((_) => Future(() {}));
+      when(() => box.put(quest.id, quest)).thenAnswer((_) => Future(() {}));
 
-        final subject = createSubject();
+      final subject = createSubject();
 
-        expect(subject.saveQuest(quest), completes);
-        verify(() => box.put(quest.id, quest)).called(1);
-      });
+      expect(subject.saveQuest(quest), completes);
+      verify(() => box.put(quest.id, quest)).called(1);
     });
 
-    test('getQuests returns stream of current quests', () {
+    test('deleteQuest', () {
+      final quest = Quest(title: 'test quest', repeat: Repeat.daily);
+
+      when(() => box.delete(quest.id)).thenAnswer((_) => Future(() {}));
+
+      final subject = createSubject();
+
+      expect(subject.deleteQuest(quest.id), completes);
+      verify(() => box.delete(quest.id)).called(1);
+    });
+
+    test('getQuestsStream returns stream of current quests', () async {
       expect(createSubject().getQuestsStream(), emits(quests));
     });
   });
