@@ -1,34 +1,27 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:quests_api/models/setting.dart';
 
 class AppApi {
-  AppApi._create();
-
-  static Future<AppApi> create() async {
-    AppApi api = AppApi._create();
-    api._asyncInit();
-    return api;
+  AppApi({required Box<Setting> box}) : _box = box {
+    _init();
   }
 
-  _asyncInit() async {
-    _prefs = await SharedPreferences.getInstance();
-  }
+  _init() {}
 
-  late SharedPreferences _prefs;
+  late Box<Setting> _box;
 
-  final String _lastLoggedDateKey = 'last-logged-date';
+  final String _appSettingKey = 'app-setting-key';
 
-  DateTime getLastLoggedDate() {
-    int? result = _prefs.getInt(_lastLoggedDateKey);
-
+  Setting getSetting() {
+    var result = _box.get(_appSettingKey);
     if (result == null) {
-      return DateTime.now();
+      return Setting.initial();
     } else {
-      return DateTime.fromMillisecondsSinceEpoch(result);
+      return result;
     }
   }
 
-  void updateLastLogedDate() async {
-    await _prefs.setInt(
-        _lastLoggedDateKey, DateTime.now().millisecondsSinceEpoch);
+  Future<void> updateSetting(Setting setting) async {
+    await _box.put(_appSettingKey, setting);
   }
 }

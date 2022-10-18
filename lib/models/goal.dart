@@ -25,17 +25,21 @@ class Goal extends Equatable {
   final bool isDone;
 
   @HiveField(6)
-  final Difficulty difficulty;
+  final Bounty bounty;
 
-  Goal(
-      {this.id = '',
-      required this.title,
-      this.detail = '',
-      DateTime? createdAt,
-      DateTime? updateAt,
-      this.isDone = false,
-      this.difficulty = Difficulty.normal})
-      : createdAt = createdAt ?? DateTime.now(),
+  @HiveField(7)
+  final DateTime targetDate;
+
+  Goal({
+    this.id = '',
+    required this.title,
+    this.detail = '',
+    DateTime? createdAt,
+    DateTime? updateAt,
+    this.isDone = false,
+    this.bounty = Bounty.small,
+    required this.targetDate,
+  })  : createdAt = createdAt ?? DateTime.now(),
         updateAt = updateAt ?? DateTime.now();
 
   Goal copyWith({
@@ -45,6 +49,8 @@ class Goal extends Equatable {
     DateTime? createdAt,
     DateTime? updateAt,
     bool? isDone,
+    Bounty? bounty,
+    DateTime? targetDate,
   }) {
     return Goal(
       id: id ?? this.id,
@@ -53,6 +59,8 @@ class Goal extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updateAt: updateAt ?? DateTime.now(),
       isDone: isDone ?? this.isDone,
+      bounty: bounty ?? this.bounty,
+      targetDate: targetDate ?? this.targetDate,
     );
   }
 

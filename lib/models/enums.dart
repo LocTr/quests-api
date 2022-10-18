@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'enums.g.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 10)
 enum Repeat {
   @HiveField(0)
   daily,
@@ -14,7 +14,7 @@ enum Repeat {
   monthly,
 }
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 11)
 enum Stat {
   @HiveField(0)
   none,
@@ -29,7 +29,7 @@ enum Stat {
   mental,
 }
 
-@HiveType(typeId: 5)
+@HiveType(typeId: 12)
 enum Difficulty {
   @HiveField(0)
   trivial,
@@ -39,4 +39,19 @@ enum Difficulty {
 
   @HiveField(2)
   hard,
+}
+
+@HiveType(typeId: 13)
+enum Bounty {
+  @HiveField(0)
+  none,
+
+  @HiveField(1)
+  small,
+
+  @HiveField(2)
+  medium,
+
+  @HiveField(3)
+  large,
 }

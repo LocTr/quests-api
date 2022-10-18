@@ -8,7 +8,7 @@ part of 'enums.dart';
 
 class RepeatAdapter extends TypeAdapter<Repeat> {
   @override
-  final int typeId = 3;
+  final int typeId = 10;
 
   @override
   Repeat read(BinaryReader reader) {
@@ -52,7 +52,7 @@ class RepeatAdapter extends TypeAdapter<Repeat> {
 
 class StatAdapter extends TypeAdapter<Stat> {
   @override
-  final int typeId = 4;
+  final int typeId = 11;
 
   @override
   Stat read(BinaryReader reader) {
@@ -101,7 +101,7 @@ class StatAdapter extends TypeAdapter<Stat> {
 
 class DifficultyAdapter extends TypeAdapter<Difficulty> {
   @override
-  final int typeId = 5;
+  final int typeId = 12;
 
   @override
   Difficulty read(BinaryReader reader) {
@@ -139,6 +139,55 @@ class DifficultyAdapter extends TypeAdapter<Difficulty> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DifficultyAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class BountyAdapter extends TypeAdapter<Bounty> {
+  @override
+  final int typeId = 13;
+
+  @override
+  Bounty read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return Bounty.none;
+      case 1:
+        return Bounty.small;
+      case 2:
+        return Bounty.medium;
+      case 3:
+        return Bounty.large;
+      default:
+        return Bounty.none;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, Bounty obj) {
+    switch (obj) {
+      case Bounty.none:
+        writer.writeByte(0);
+        break;
+      case Bounty.small:
+        writer.writeByte(1);
+        break;
+      case Bounty.medium:
+        writer.writeByte(2);
+        break;
+      case Bounty.large:
+        writer.writeByte(3);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BountyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,31 +1,19 @@
 import 'package:hive/hive.dart';
-import 'package:quests_api/models/enums.dart';
-import 'package:quests_api/models/goal.dart';
 import 'package:quests_api/models/quest.dart';
 import 'package:rxdart/rxdart.dart';
 
 class QuestsApi {
-  QuestsApi({required Box<Quest> box, required HiveInterface hiveInterface})
-      : _box = box,
-        _hiveInterface = hiveInterface {
+  QuestsApi({required Box<Quest> box}) : _box = box {
     _init();
   }
 
   _init() {
-    _hiveInterface
-      ..registerAdapter(QuestAdapter())
-      ..registerAdapter(GoalAdapter())
-      ..registerAdapter(DifficultyAdapter())
-      ..registerAdapter(StatAdapter())
-      ..registerAdapter(RepeatAdapter());
     _questStreamController.add(_box.values.toList());
 
     _box.watch().listen((_) {
       _questStreamController.add(_box.values.toList());
     });
   }
-
-  final HiveInterface _hiveInterface;
 
   final Box<Quest> _box;
 

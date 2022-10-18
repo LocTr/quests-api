@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -8,8 +7,6 @@ import 'package:quests_api/apis/quests_api.dart';
 import 'package:quests_api/models/enums.dart';
 import 'package:quests_api/models/quest.dart';
 
-class MockHive extends Mock implements HiveInterface {}
-
 class MockBox<Quest> extends Mock implements Box<Quest> {}
 
 class MockAdapter extends Mock implements QuestAdapter {}
@@ -17,18 +14,27 @@ class MockAdapter extends Mock implements QuestAdapter {}
 void main() {
   //setup
   group('QuestsApi', () {
-    late HiveInterface hive;
     late Box<Quest> box;
 
     final quests = [
-      Quest(title: 'quest 0', repeat: Repeat.daily, detail: 'quest 0 detail'),
       Quest(
-          title: 'quest 1', repeat: Repeat.weekly, difficulty: Difficulty.hard),
-      Quest(title: 'quest 2', repeat: Repeat.monthly, stat: Stat.mental),
+          title: 'quest 0',
+          repeat: Repeat.daily,
+          detail: 'quest 0 detail',
+          nextResetDate: DateTime.now()),
+      Quest(
+          title: 'quest 1',
+          repeat: Repeat.weekly,
+          difficulty: Difficulty.hard,
+          nextResetDate: DateTime.now()),
+      Quest(
+          title: 'quest 2',
+          repeat: Repeat.monthly,
+          stat: Stat.mental,
+          nextResetDate: DateTime.now()),
     ];
 
     setUp(() {
-      hive = MockHive();
       box = MockBox<Quest>();
       when(() => box.values).thenReturn(quests);
       when(() => box.watch())
@@ -36,7 +42,7 @@ void main() {
     });
 
     QuestsApi createSubject() {
-      return QuestsApi(box: box, hiveInterface: hive);
+      return QuestsApi(box: box);
     }
 
     group('constructor', () {
@@ -63,25 +69,22 @@ void main() {
     });
 
     test('save quest', () {
-      final quest = Quest(title: 'test quest', repeat: Repeat.daily);
-
-      when(() => box.put(quest.id, quest)).thenAnswer((_) => Future(() {}));
+      when(() => box.put(quests[0].id, quests[0]))
+          .thenAnswer((_) => Future(() {}));
 
       final subject = createSubject();
 
-      expect(subject.saveQuest(quest), completes);
-      verify(() => box.put(quest.id, quest)).called(1);
+      expect(subject.saveQuest(quests[0]), completes);
+      verify(() => box.put(quests[0].id, quests[0])).called(1);
     });
 
     test('deleteQuest', () {
-      final quest = Quest(title: 'test quest', repeat: Repeat.daily);
-
-      when(() => box.delete(quest.id)).thenAnswer((_) => Future(() {}));
+      when(() => box.delete(quests[0].id)).thenAnswer((_) => Future(() {}));
 
       final subject = createSubject();
 
-      expect(subject.deleteQuest(quest.id), completes);
-      verify(() => box.delete(quest.id)).called(1);
+      expect(subject.deleteQuest(quests[0].id), completes);
+      verify(() => box.delete(quests[0].id)).called(1);
     });
 
     test('getQuestsStream returns stream of current quests', () async {

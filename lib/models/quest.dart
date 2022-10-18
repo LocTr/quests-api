@@ -32,6 +32,9 @@ class Quest extends Equatable {
   @HiveField(7)
   final Stat stat;
 
+  @HiveField(8)
+  final DateTime nextResetDate;
+
   Quest({
     String? id,
     required this.title,
@@ -41,6 +44,7 @@ class Quest extends Equatable {
     required this.repeat,
     this.difficulty = Difficulty.normal,
     this.stat = Stat.none,
+    required this.nextResetDate,
   })  : id = id ?? const Uuid().v4(),
         createdAt = createdAt ?? DateTime.now(),
         updateAt = updateAt ?? DateTime.now();
@@ -54,6 +58,7 @@ class Quest extends Equatable {
     Repeat? repeat,
     Difficulty? difficulty,
     Stat? stat,
+    DateTime? nextResetDate,
   }) {
     return Quest(
         id: id ?? this.id,
@@ -63,7 +68,8 @@ class Quest extends Equatable {
         updateAt: updateAt ?? DateTime.now(),
         repeat: repeat ?? this.repeat,
         difficulty: difficulty ?? this.difficulty,
-        stat: stat ?? this.stat);
+        stat: stat ?? this.stat,
+        nextResetDate: nextResetDate ?? this.nextResetDate);
   }
 
   @override
@@ -76,6 +82,7 @@ class Quest extends Equatable {
         repeat,
         difficulty,
         stat,
+        nextResetDate,
       ];
 
   @override

@@ -25,13 +25,14 @@ class QuestAdapter extends TypeAdapter<Quest> {
       repeat: fields[5] as Repeat,
       difficulty: fields[6] as Difficulty,
       stat: fields[7] as Stat,
+      nextResetDate: fields[8] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Quest obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class QuestAdapter extends TypeAdapter<Quest> {
       ..writeByte(6)
       ..write(obj.difficulty)
       ..writeByte(7)
-      ..write(obj.stat);
+      ..write(obj.stat)
+      ..writeByte(8)
+      ..write(obj.nextResetDate);
   }
 
   @override

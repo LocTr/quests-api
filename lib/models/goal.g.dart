@@ -23,14 +23,15 @@ class GoalAdapter extends TypeAdapter<Goal> {
       createdAt: fields[3] as DateTime?,
       updateAt: fields[4] as DateTime?,
       isDone: fields[5] as bool,
-      difficulty: fields[6] as Difficulty,
+      bounty: fields[6] as Bounty,
+      targetDate: fields[7] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Goal obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class GoalAdapter extends TypeAdapter<Goal> {
       ..writeByte(5)
       ..write(obj.isDone)
       ..writeByte(6)
-      ..write(obj.difficulty);
+      ..write(obj.bounty)
+      ..writeByte(7)
+      ..write(obj.targetDate);
   }
 
   @override
