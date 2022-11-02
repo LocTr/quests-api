@@ -26,15 +26,17 @@ class QuestsApi {
 
   Future<void> saveQuest(Quest quest) async {
     await _box.put(quest.id, quest);
-    return;
   }
 
   Future<void> deleteQuest(String id) async {
     await _box.delete(id);
-    return;
   }
 
   Future<List<Quest>> getQuests() async {
     return _box.values.toList();
+  }
+
+  Future<void> deleteAllQuests() async {
+    await _box.clear();
   }
 }
